@@ -1,6 +1,6 @@
-import Head from 'next/head'
+
 import { postData } from '../lib/request';
-import styles from '../styles/Home.modules.css'
+// import {container, main, login } from '../styles/home.css'
 import { useState } from 'react';
 import { useRouter } from 'next/router'
 
@@ -8,6 +8,15 @@ export default function Home({posts}) {
 
   const [data, setData] = useState({email: null, password: null});
   const router = useRouter()
+  const main =  `min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;`
+  const container = `padding: 0 2rem;`
+  const login = `width: 450px;`
 
   const submit = (e) => {
     e.preventDefault()
@@ -22,15 +31,15 @@ export default function Home({posts}) {
 
   return (
 
-    <div className={styles.container}>
+    <div style={{container}}>
       <Head>
         <title>Login</title>
         <meta name="description" content="Login" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <form  className={styles.login}>
+      <main style={{main}}>
+        <form  style={{login}}>
           <input 
             type={"text"} 
             placeholder="Enter Your Email" 
