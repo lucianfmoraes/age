@@ -1,11 +1,16 @@
 import ButtonRed from "@/components/ButtonRed";
 import ButtonYellow from "@/components/ButtonYellow";
+import EditProduct from "@/components/EditProduct"
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
+import { Modal, Button } from "react-bootstrap";
 
 export const TableComponent = () => {
     const [data, setData] = useState([]);
+    const [show, setShow] = useState(false);
     const [isLoading, setLoading] = useState(true)
+    const [editData, setEditData] = useState({});
+
     const router = useRouter();
     
     useEffect(() => {
@@ -22,6 +27,7 @@ export const TableComponent = () => {
     if (!data || data == [] || data.map == undefined) return <p>No profile data</p>
     
     return (
+        <>
         <table className="table table-striped table-hover">
             <thead className="thead-dark">
                 <tr>
@@ -41,7 +47,7 @@ export const TableComponent = () => {
                             <td>{row.price}</td>
                             <td>{row.quantity}</td>
                             <td>
-                                <ButtonYellow callback={handleEdit} />
+                                <ButtonYellow callback={() => handleEdit(setShow, row, setEditData)} />
                                 <ButtonRed callback={() => handleDelete(row.id, router)} />
                             </td>
                         </tr>
@@ -49,8 +55,21 @@ export const TableComponent = () => {
                 }
             </tbody>
         </table>
-
+        <CustomModal 
+            show={show} 
+            setShow={setShow} 
+            title={"Editar produto"} 
+            body={"Deseja realmente editar esse produto ?"} 
+            editData={editData}
+        />
+        </>
     )
+}
+
+const handleEdit = (setShow, editData, setEditData) => {
+    setShow(true);
+    setEditData(editData);
+    console.log(editData);
 }
 
 const handleDelete = async (id, router) => {
@@ -65,8 +84,25 @@ const handleDelete = async (id, router) => {
   
 }
 
-const handleEdit = e => {
-    return alert(e)
+const CustomModal = ({ show, setShow, title, editData }) => {
+    const handleClose = () => setShow(false);
+    console.log(editData)
+    return (
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>{`${title} de id: ${editData.id}`} </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <EditProduct 
+                    productId={editData.id}
+                    nomeInitial={editData.nome}
+                    preçoInitial={editData.preçoInitial}
+                    quantidadeInitial={editData.quantidadeInitial}
+                    setShow={setShow}
+                />
+            </Modal.Body>
+        </Modal>
+    );
 }
 
 export default TableComponent;
