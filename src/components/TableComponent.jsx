@@ -19,7 +19,7 @@ export const TableComponent = () => {
       }, [])
 
     if (isLoading) return <p>Loading...</p>
-    if (!data) return <p>No profile data</p>
+    if (!data || data == [] || data.map == undefined) return <p>No profile data</p>
     
     return (
         <table className="table table-striped table-hover">
